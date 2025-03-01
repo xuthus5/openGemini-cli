@@ -30,6 +30,8 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version-file: "go.mod"
+      - name: Install upx
+        run: sudo apt install upx -y
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v4
         with:

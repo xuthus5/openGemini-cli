@@ -65,12 +65,19 @@ func (p *LineProtocolParser) Parse() ([]*opengemini.Point, error) {
 		if err != nil {
 			return nil, err
 		}
+		if lp == nil {
+			continue
+		}
 		p.points = append(p.points, lp)
 	}
 	return p.points, nil
 }
 
 func (p *LineProtocolParser) parse(line string) (*opengemini.Point, error) {
+	// ignore comment
+	if line[0] == '#' {
+		return nil, nil
+	}
 	p.currentState = Measurement
 	p.currentPoint = &opengemini.Point{Tags: make(map[string]string), Fields: make(map[string]interface{})}
 
@@ -109,16 +116,19 @@ func (p *LineProtocolParser) parse(line string) (*opengemini.Point, error) {
 				p.escape = false
 				continue
 			}
-			if p.currentState == Measurement {
+			switch p.currentState {
+			case Measurement:
 				p.currentState = TagKey
 				continue
-			}
-			if p.currentState == TagValue {
+			case TagValue:
+				if p.bracket {
+					p.appendToken(token)
+					continue
+				}
 				p.currentState = TagKey
 				p.appendTagOrField()
 				continue
-			}
-			if p.currentState == FieldValue {
+			case FieldValue:
 				p.currentState = FieldKey
 				p.appendTagOrField()
 				continue
@@ -135,13 +145,34 @@ func (p *LineProtocolParser) parse(line string) (*opengemini.Point, error) {
 			if p.currentState == Timestamp {
 				break
 			}
-			if p.currentState == Measurement || p.currentState == TagKey || p.currentState == TagValue {
+			switch p.currentState {
+			case Measurement, TagKey, TagValue:
 				p.currentState = FieldKey
-			} else if p.currentState == FieldKey || p.currentState == FieldValue {
+			case FieldKey, FieldValue:
 				p.currentState = Timestamp
 			}
 		case '[':
-
+			if p.escape || p.quota {
+				p.appendToken(token)
+				p.escape = false
+				continue
+			}
+			if p.currentState != TagValue {
+				return nil, errors.New("invalid tag value token: '['")
+			}
+			p.bracket = true
+			p.appendToken(token)
+		case ']':
+			if p.escape || p.quota {
+				p.appendToken(token)
+				p.escape = false
+				continue
+			}
+			if p.currentState != TagValue {
+				return nil, errors.New("invalid tag value token: ']'")
+			}
+			p.bracket = false
+			p.appendToken(token)
 		default:
 			p.appendToken(token)
 		}

@@ -29,16 +29,21 @@ builds:
       - linux
       - windows
       - darwin
-      - freebsd
     goarch:
       - amd64
       - arm64
+    ignore:
+      - goos: windows
+        goarch: arm64
     ldflags:
       - -s -w
       - -X github.com/openGemini/openGemini-cli/common.Version={{.Tag}}
       - -X github.com/openGemini/openGemini-cli/common.GitCommit={{.ShortCommit}}
       - -X github.com/openGemini/openGemini-cli/common.BuildTime={{.Date}}
       - -X github.com/openGemini/openGemini-cli/common.GitBranch={{.Branch}}
+    flags:
+      - -trimpath
+      - -gcflags=-l -B
 
 archives:
   - formats: [ 'zip' ]
@@ -57,6 +62,13 @@ changelog:
     exclude:
       - "^docs:"
       - "^test:"
+upx:
+  - enabled: true
+    goos: [linux, windows]
+    goarch: [amd64, arm64]
+    compress: best
+    lzma: true
+    brute: true
 
 release:
   footer: >-
