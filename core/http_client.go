@@ -127,6 +127,10 @@ func NewHttpClient(cfg *CommandLineConfig) (HttpClient, error) {
 		}
 	}
 
+	if cfg.Username != "" && cfg.Password != "" {
+		client.SetAuth(cfg.Username, cfg.Password)
+	}
+
 	client.HostPort = schema + "://" + cfg.Host + ":" + strconv.FormatInt(int64(cfg.Port), 10)
 
 	client.client.Transport = transport
