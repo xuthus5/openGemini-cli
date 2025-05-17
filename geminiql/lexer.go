@@ -247,25 +247,44 @@ func (t *Tokenizer) scanDigit() (int, string) {
 	var buf bytes.Buffer
 
 	typ := INTEGER
+	// boundary checking: sometimes a measurement begins with a number
+	if t.firstToken() == INSERT && t.lastToken() == WS_TOKEN && len(t.tokens) == 2 {
+		typ = IDENT
+	}
+OutLoop:
 	for {
 		ch := t.read()
-
-		if ch == EOF {
-			break
-		} else if ch == '.' {
-			nch := t.Lookahead()
-			if !unicode.IsDigit(nch) {
-				_ = t.unRead()
-				break
-			} else {
+		switch ch {
+		case EOF:
+			break OutLoop
+		case '.':
+			switch typ {
+			case INTEGER:
+				nch := t.Lookahead()
+				if !unicode.IsDigit(nch) {
+					_ = t.unRead()
+					break OutLoop
+				} else {
+					buf.WriteRune(ch)
+					typ = DECIMAL
+				}
+			case IDENT:
 				buf.WriteRune(ch)
-				typ = DECIMAL
 			}
-		} else if !unicode.IsDigit(ch) {
+		case ',':
 			_ = t.unRead()
-			break
-		} else {
-			buf.WriteRune(ch)
+			break OutLoop
+		default:
+			switch typ {
+			case INTEGER, DECIMAL:
+				if !unicode.IsDigit(ch) {
+					_ = t.unRead()
+					break OutLoop
+				}
+				fallthrough
+			default:
+				buf.WriteRune(ch)
+			}
 		}
 	}
 	return typ, buf.String()

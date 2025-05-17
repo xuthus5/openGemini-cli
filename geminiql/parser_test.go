@@ -191,24 +191,24 @@ func TestParser(t *testing.T) {
 				LineProtocol: `weather,location=us-midwest temp\=rature=82 1465839830100400191`,
 			},
 		},
-		// {
-		// 	name: "measurement with back slash and comma insert",
-		// 	cmd:  `insert wea\,ther,location=us-midwest temperature=82 1465839830100400200`,
-		// 	expect: &InsertStatement{
-		// 		DB:           "",
-		// 		RP:           "",
-		// 		LineProtocol: `wea\,ther,location=us-midwest temperature=82 1465839830100400200`,
-		// 	},
-		// },
-		// {
-		// 	name: "measurement with three back slash and blank space insert",
-		// 	cmd:  `insert wea\\\ ther,location=us-midwest temperature=82 1465839830100400200`,
-		// 	expect: &InsertStatement{
-		// 		DB:           "",
-		// 		RP:           "",
-		// 		LineProtocol: `wea\\\ ther,location=us-midwest temperature=82 1465839830100400200`,
-		// 	},
-		// },
+		{
+			name: "measurement with back slash and comma insert",
+			cmd:  `insert wea\,ther,location=us-midwest temperature=82 1465839830100400200`,
+			expect: &InsertStatement{
+				DB:           "",
+				RP:           "",
+				LineProtocol: `wea\,ther,location=us-midwest temperature=82 1465839830100400200`,
+			},
+		},
+		{
+			name: "measurement with three back slash and blank space insert",
+			cmd:  `insert wea\\\ ther,location=us-midwest temperature=82 1465839830100400200`,
+			expect: &InsertStatement{
+				DB:           "",
+				RP:           "",
+				LineProtocol: `wea\\\ ther,location=us-midwest temperature=82 1465839830100400200`,
+			},
+		},
 		{
 			name: "measurement with back slash and blank space insert",
 			cmd:  `insert wea\ ther,location=us-midwest temperature=82 1465839830100400200`,
@@ -310,6 +310,15 @@ func TestParser(t *testing.T) {
 				DB:           "",
 				RP:           "",
 				LineProtocol: `cpu,t1=[aaaaa,'bbbbb'] value=3`,
+			},
+		},
+		{
+			name: "insert measurement name begin with number",
+			cmd:  "insert 94ae489576a54416b8e78a89f0cfae05_d64027d4-f506-4734-8cbb-fcbb80e815ab,t1=t f1=1",
+			expect: &InsertStatement{
+				DB:           "",
+				RP:           "",
+				LineProtocol: "94ae489576a54416b8e78a89f0cfae05_d64027d4-f506-4734-8cbb-fcbb80e815ab,t1=t f1=1",
 			},
 		},
 	} {
