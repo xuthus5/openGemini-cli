@@ -37,8 +37,13 @@ const (
 	ILLEGAL_TOKEN
 )
 
-func isChar(ch rune) bool {
-	return unicode.IsLetter(ch) || ch == '_'
+func isLetter(ch rune) bool {
+	return unicode.IsLetter(ch)
+}
+
+func isLegalSymbol(ch rune) bool {
+	return ch == '!' || ch == '#' || ch == '$' || ch == '%' || ch == '@' ||
+		ch == '&' || ch == '_' || ch == '-' || ch == '/'
 }
 
 func isSplitChar(ch rune) bool {
@@ -105,7 +110,7 @@ func (t *Tokenizer) Scan() (tok int, val string) {
 
 	if unicode.IsSpace(ch) {
 		return t.scanWhiteSpace()
-	} else if isChar(ch) {
+	} else if isLetter(ch) || isLegalSymbol(ch) {
 		return t.scanIdentifier()
 	} else if unicode.IsDigit(ch) {
 		return t.scanDigit()
@@ -114,9 +119,7 @@ func (t *Tokenizer) Scan() (tok int, val string) {
 	switch ch {
 	case EOF:
 		return EOF_TOKEN, ""
-	case '\'':
-		return t.scanString()
-	case '"':
+	case '\'', '"':
 		return t.scanString()
 	case '.':
 		ch = t.read()
