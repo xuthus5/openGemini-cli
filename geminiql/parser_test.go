@@ -321,6 +321,15 @@ func TestParser(t *testing.T) {
 				LineProtocol: "94ae489576a54416b8e78a89f0cfae05_d64027d4-f506-4734-8cbb-fcbb80e815ab,t1=t f1=1",
 			},
 		},
+		{
+			name: "insert field name with '@','#','$'",
+			cmd:  "insert mst3,tag1=k1 @f1=1,#f2=2,$hello=hahaha,_good=1,h-a=1,/ss/=90",
+			expect: &InsertStatement{
+				DB:           "",
+				RP:           "",
+				LineProtocol: "mst3,tag1=k1 @f1=1,#f2=2,$hello=hahaha,_good=1,h-a=1,/ss/=90",
+			},
+		},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			ast := &QLAst{}
