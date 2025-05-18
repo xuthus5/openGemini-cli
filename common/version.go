@@ -21,10 +21,10 @@ import (
 
 // Version information, the value is set by the build script
 var (
-	Version   string
-	GitCommit string
-	BuildTime string
-	GitBranch string
+	Version   = "unknown"
+	GitCommit = "unknown"
+	BuildTime = "unknown"
+	GitBranch = "unknown"
 )
 
 // FullVersion returns the full version string.
