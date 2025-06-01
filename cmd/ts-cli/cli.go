@@ -106,6 +106,12 @@ func (m *Command) importCommand() {
 	cmd.Flags().IntVarP(&config.ColumnWritePort, "column-write-port", "W", 8305, "high performance column writing protocol service port")
 	cmd.Flags().IntVarP(&config.BatchSize, "batch-size", "b", 100, "enable batch submission to improve write performance")
 	cmd.Flags().StringVarP(&config.Path, "path", "T", "", "import file path to store openGemini")
+	cmd.Flags().StringVarP(&config.Format, "format", "f", "line_protocol", "import file format, support `line_protocol`, `csv`")
+	cmd.Flags().StringSliceVarP(&config.Tags, "tags", "g", nil, "measurement tags field name")
+	cmd.Flags().StringSliceVarP(&config.Fields, "fields", "F", nil, "measurement field name")
+	cmd.Flags().StringVarP(&config.Measurement, "measurement", "m", "", "measurement name")
+	cmd.Flags().StringVarP(&config.Database, "database", "d", "", "database name")
+	cmd.Flags().StringVarP(&config.TimeField, "time-field", "M", "time", "measurement time field name")
 
 	cmd.MarkFlagsRequiredTogether("username", "password")
 	cmd.MarkFlagsRequiredTogether("cert", "cert-key")

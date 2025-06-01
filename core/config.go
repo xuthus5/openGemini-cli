@@ -22,6 +22,7 @@ type CommandLineConfig struct {
 	Password         string
 	Database         string
 	RetentionPolicy  string
+	Measurement      string
 	Timeout          int
 	EnableTls        bool
 	InsecureTls      bool
