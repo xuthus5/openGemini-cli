@@ -3,8 +3,8 @@ module github.com/openGemini/openGemini-cli
 go 1.24
 
 require (
-	github.com/olekukonko/tablewriter v0.0.5
-	github.com/openGemini/go-prompt v0.0.0-20240906095849-29653678978f
+	github.com/olekukonko/tablewriter v1.0.7
+	github.com/openGemini/go-prompt v0.0.0-20250603013942-a2bf30109e15
 	github.com/openGemini/opengemini-client-go v0.9.1-0.20250228002517-f7a891a82c54
 	github.com/spf13/cobra v1.9.1
 	github.com/stretchr/testify v1.10.0
@@ -16,6 +16,7 @@ require (
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/fatih/color v1.18.0 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/klauspost/compress v1.17.11 // indirect
@@ -26,6 +27,8 @@ require (
 	github.com/mattn/go-runewidth v0.0.16 // indirect
 	github.com/mattn/go-tty v0.0.7 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
+	github.com/olekukonko/errors v1.1.0 // indirect
+	github.com/olekukonko/ll v0.0.8 // indirect
 	github.com/pkg/term v1.2.0-beta.2 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/prometheus/client_golang v1.20.5 // indirect

@@ -26,6 +26,8 @@ import (
 	"time"
 
 	"github.com/olekukonko/tablewriter"
+	"github.com/olekukonko/tablewriter/renderer"
+	"github.com/olekukonko/tablewriter/tw"
 	"github.com/openGemini/opengemini-client-go/opengemini"
 	"golang.org/x/term"
 
@@ -179,7 +181,28 @@ func (cl *CommandLine) output(result *opengemini.SeriesResult) {
 			_, _ = fmt.Fprintf(os.Stdout, "tags: %s\n", strings.Join(tags, ", "))
 		}
 
-		writer := tablewriter.NewWriter(os.Stdout)
+		writer := tablewriter.NewTable(os.Stdout, tablewriter.WithRenderer(
+			renderer.NewBlueprint(tw.Rendition{
+				Symbols: tw.NewSymbols(tw.StyleASCII),
+				Settings: tw.Settings{
+					Separators: tw.Separators{BetweenRows: tw.On},
+					Lines:      tw.Lines{ShowFooterLine: tw.On},
+				},
+			})),
+			tablewriter.WithConfig(tablewriter.Config{
+				Row: tw.CellConfig{
+					Formatting: tw.CellFormatting{
+						AutoWrap: tw.WrapNone,
+					},
+					Padding: tw.CellPadding{},
+				},
+				Header: tw.CellConfig{
+					Formatting: tw.CellFormatting{
+						AutoFormat: tw.Off,
+					},
+				},
+			}),
+		)
 		cl.prettyTable(series, writer)
 		writer.Render()
 		_, _ = fmt.Fprintf(os.Stdout, "%d columns, %d rows in set\n", len(series.Columns), len(series.Values))
@@ -187,8 +210,7 @@ func (cl *CommandLine) output(result *opengemini.SeriesResult) {
 }
 
 func (cl *CommandLine) prettyTable(series *opengemini.Series, w *tablewriter.Table) {
-	w.SetAutoFormatHeaders(false)
-	w.SetHeader(series.Columns)
+	w.Header(series.Columns)
 	for _, value := range series.Values {
 		tuple := make([]string, len(value))
 		for i, val := range value {
