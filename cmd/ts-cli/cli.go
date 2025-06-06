@@ -36,6 +36,7 @@ func (m *Command) rootCommand() {
 		CompletionOptions: cobra.CompletionOptions{
 			DisableNoDescFlag:   true,
 			DisableDescriptions: true,
+			HiddenDefaultCmd:    true,
 		},
 		Run: func(cmd *cobra.Command, args []string) {
 			core.NewCommandLine(m.options).Run()
@@ -66,6 +67,7 @@ func (m *Command) versionCommand() {
 		CompletionOptions: cobra.CompletionOptions{
 			DisableNoDescFlag:   true,
 			DisableDescriptions: true,
+			HiddenDefaultCmd:    true,
 		},
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println(common.FullVersion())
@@ -84,6 +86,7 @@ func (m *Command) importCommand() {
 		CompletionOptions: cobra.CompletionOptions{
 			DisableNoDescFlag:   true,
 			DisableDescriptions: true,
+			HiddenDefaultCmd:    true,
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			importCmd := new(ImportCommand)

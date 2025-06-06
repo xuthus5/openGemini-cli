@@ -34,6 +34,7 @@ Usage:
 
 Available Commands:
   help        Help about any command
+  import      import data to openGemini
   version     version for openGemini CLI
 
 Flags:
@@ -58,6 +59,24 @@ Use "ts-cli [command] --help" for more information about a command.
 ## Develop Requirements
 
 - Go 1.24+
+
+```bash
+# 1. clone source codes from Github
+git clone https://github.com/openGemini/openGemini-cli.git
+
+# 2. enter the work directory
+cd openGemini-cli
+
+# 3. build binary to dist
+go build -o dist/ ./cmd/...
+
+# 4. check compiled binary file
+ls dist/
+> ts-cli
+
+# 5. test function
+ts-cli --host localhost --port 8086 # ...other params
+```
 
 ## Code of Conduct
 
