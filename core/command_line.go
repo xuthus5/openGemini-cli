@@ -263,20 +263,20 @@ func (cl *CommandLine) executePrecision(stmt *geminiql.PrecisionStatement) error
 func (cl *CommandLine) executeHelp(stmt *geminiql.HelpStatement) error {
 	fmt.Println(
 		`Usage:
-  exit/quit/ctrl+d        quit the openGemini shell
-  timer                   display execution time
-  debug                   display http request interaction content
-  prompt                  enable command line reminder and suggestion
-  auth                    prompt for username and password
-  use <db>[.rp]           set current database and optional retention policy
-  Precision <format>      specifies the format of the timestamp: rfc3339, h, m, s, ms, u or ns
-  show cluster            show cluster node status information
-  show users              show all existing users and their permission status
-  show databases          show a list of all databases on the cluster
-  show measurements       show measurement information on the database.retention_policy
-  show series             show series information
-  show tag keys           show tag key information
-  show field keys         show field key information
+  exit/quit/\q/ctrl-c/ctrl-d quit the openGemini shell
+  timer                      display execution time
+  debug                      display http request interaction content
+  prompt                     enable command line reminder and suggestion
+  auth                       prompt for username and password
+  use <db>[.rp]              set current database and optional retention policy
+  Precision <format>         specifies the format of the timestamp: rfc3339, h, m, s, ms, u or ns
+  show cluster               show cluster node status information
+  show users                 show all existing users and their permission status
+  show databases             show a list of all databases on the cluster
+  show measurements          show measurement information on the database.retention_policy
+  show series                show series information
+  show tag keys              show tag key information
+  show field keys            show field key information
 
   A full list of openGemini commands can be found at:
   https://docs.opengemini.org
