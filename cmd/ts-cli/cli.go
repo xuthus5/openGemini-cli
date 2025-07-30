@@ -19,7 +19,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	subcmd "github.com/openGemini/openGemini-cli/cmd/subcmd"
+	"github.com/openGemini/openGemini-cli/cmd/subcmd"
 	"github.com/openGemini/openGemini-cli/common"
 	"github.com/openGemini/openGemini-cli/core"
 )
