@@ -27,6 +27,8 @@ import (
 
 	"github.com/mattn/go-runewidth"
 	"github.com/olekukonko/tablewriter"
+	"github.com/olekukonko/tablewriter/renderer"
+	"github.com/olekukonko/tablewriter/tw"
 	"github.com/openGemini/opengemini-client-go/opengemini"
 	"golang.org/x/term"
 
@@ -193,9 +195,12 @@ func (cl *CommandLine) output(result *opengemini.SeriesResult) {
 }
 
 func (cl *CommandLine) prettyTable(series *opengemini.Series) {
-	writer := tablewriter.NewWriter(os.Stdout)
-	writer.SetAutoFormatHeaders(false)
-	writer.SetHeader(series.Columns)
+	table := tablewriter.NewTable(os.Stdout,
+		tablewriter.WithRenderer(
+			renderer.NewBlueprint(tw.Rendition{Symbols: tw.NewSymbols(tw.StyleASCII)})),
+		tablewriter.WithEastAsian(false),
+	)
+	table.Header(series.Columns)
 	for _, value := range series.Values {
 		tuple := make([]string, len(value))
 		for i, val := range value {
@@ -214,9 +219,9 @@ func (cl *CommandLine) prettyTable(series *opengemini.Series) {
 			}
 			tuple[i] = fmt.Sprintf("%v", val)
 		}
-		writer.Append(tuple)
+		_ = table.Append(tuple)
 	}
-	writer.Render()
+	_ = table.Render()
 }
 
 func (cl *CommandLine) prettyVertical(series *opengemini.Series) {
