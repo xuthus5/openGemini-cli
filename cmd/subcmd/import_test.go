@@ -50,3 +50,42 @@ func TestParseTimestamp(t *testing.T) {
 		})
 	}
 }
+
+func TestParse2String(t *testing.T) {
+	type testCase struct {
+		fieldType int
+		precision string
+		inputAny  any
+		expect    string
+	}
+
+	testCases := []testCase{
+		{TypeField, "", 55, "55"},
+		{TypeField, "", 66.6, "66.6"},
+		{TypeField, "", true, "true"},
+		{TypeField, "", false, "false"},
+		{TypeField, "", "royal", "\"royal\""},
+		{TypeField, "", nil, "\"\""},
+
+		{TypeTimestamp, "", 1234567890, "1234567890"},
+		{TypeTimestamp, "", 1234567890.1, "1234567890.1"},
+		{TypeTimestamp, "s", "2010-07-01T18:48:00Z", "1278010080"},
+		{TypeTimestamp, "ns", "2010-07-01T18:48:00Z", "1278010080000000000"},
+		{TypeTimestamp, "ms", "2010-07-01T18:48:00Z", "1278010080000"},
+		{TypeTimestamp, "us", "2010-07-01T18:48:00Z", "1278010080000000"},
+		{TypeTimestamp, "", "2010-07-01T18:48:00ZZZ", ""},
+	}
+
+	for _, tcase := range testCases {
+		t.Run(tcase.precision, func(t *testing.T) {
+			c := new(ImportCommand)
+			cfg := &ImportConfig{CommandLineConfig: new(core.CommandLineConfig)}
+			cfg.Precision = tcase.precision
+			c.cfg = cfg
+			err := c.cfg.configTimeMultiplier()
+			require.NoError(t, err)
+			act := c.parse2String(tcase.inputAny, tcase.fieldType)
+			require.Equal(t, tcase.expect, act)
+		})
+	}
+}
